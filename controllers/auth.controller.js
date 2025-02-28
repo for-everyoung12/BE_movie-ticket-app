@@ -4,14 +4,14 @@ require("dotenv").config();
 
 exports.register = async (req, res) => {
     try {
-      const { username, password, role } = req.body;
+      const { email, password, role } = req.body;
   
-      const existingUser = await User.findOne({ username });
+      const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
+        return res.status(400).json({ message: "email already exists" });
       }
 
-      const user = new User({ username, password, role: role || "user"
+      const user = new User({ email, password, role: role || "user"
       });
       await user.save();
   
@@ -22,8 +22,8 @@ exports.register = async (req, res) => {
   };
 
   exports.login = async (req, res) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
   
     if (user && await user.comparePassword(password)) {
       const accessToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
   
       res.json({ accessToken, refreshToken });
     } else {
-      res.status(401).json({ message: "Invalid username or password" });
+      res.status(401).json({ message: "Invalid email or password" });
     }
   };
 

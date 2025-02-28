@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const Movie = require('./models/movie.model');
 const User = require('./models/user.model');
 const Ticket = require('./models/ticket.model');
@@ -8,7 +8,6 @@ const Payment = require('./models/payment.model');
 const Review = require('./models/review.model');
 const cors = require("cors");
 const passport = require("passport");
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,7 +30,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
   });
 
 // Routes
-app.use("api/auth", require("./routes/auth.routes"));
+app.use("/api/auth", require("./routes/auth.routes"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Start successful" });

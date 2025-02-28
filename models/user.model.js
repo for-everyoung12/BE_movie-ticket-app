@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, default: 'User' },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: String },
@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     type: { type: String, enum: ['Credit Card', 'PayPal'], required: true },
     last4: { type: String, required: true },
     expiry: { type: String, required: true }
-  }]
+  }],
+  refreshTokens: [{ type: String }],
 });
 
 userSchema.pre('save', async function(next) {
