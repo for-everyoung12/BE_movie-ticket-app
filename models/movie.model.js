@@ -7,8 +7,8 @@ const movieSchema = new mongoose.Schema({
   release_date: { type: Date, required: true },
   duration: { type: Number, required: true },  // Duration in minutes
   poster_url: { type: String },
-  rating: { type: Number, min: 1, max: 5 },  // Rating from 1 to 5
-  average_rating: { type: Number, min: 1, max: 5 },
+  rating: { type: Number, min: 1, max: 10 }, 
+  average_rating: { type: Number, min: 1, max: 10 },
   age_rating: { type: String, enum: ['G', 'PG', 'PG-13', 'R'] },  // Age rating
   trailer_url: { type: String },
   showtimes: [{

@@ -6,6 +6,9 @@ const User = require('./models/user.model');
 const Ticket = require('./models/ticket.model');
 const Payment = require('./models/payment.model');
 const Review = require('./models/review.model');
+const Room = require('./models/room.model');
+const Showtime = require('./models/showtime.model');
+const Seat = require('./models/seat.model');
 const cors = require("cors");
 const passport = require("passport");
 
