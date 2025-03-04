@@ -9,6 +9,7 @@ const Review = require('./models/review.model');
 const Room = require('./models/room.model');
 const Showtime = require('./models/showtime.model');
 const Seat = require('./models/seat.model');
+const Cinema = require('./models/cinema.model');
 const cors = require("cors");
 const passport = require("passport");
 
@@ -38,6 +39,12 @@ app.use("/api/auth", require("./routes/auth.routes"));
 
   //Movie
 app.use("/api/movies", require("./routes/movie.routes"));
+  //Cinema
+app.use("/api/cinemas", require("./routes/cinema.routes"));
+  //Room
+app.use("/api/rooms", require("./routes/room.routes"));
+  //Showtime
+app.use("/api/showtimes", require("./routes/showtime.routes"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Start successful" });
