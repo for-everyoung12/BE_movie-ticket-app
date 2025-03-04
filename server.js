@@ -33,7 +33,11 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
   });
 
 // Routes
+  //Authenication
 app.use("/api/auth", require("./routes/auth.routes"));
+
+  //Movie
+app.use("/api/movies", require("./routes/movie.routes"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Start successful" });
