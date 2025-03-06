@@ -15,7 +15,6 @@ class ShowtimeService {
 
     static async addShowtime(showtimeData){
         try {
-            //check movie_id, room_id
             const movie = await Movie.findById(showtimeData.movie_id);
             if(!movie){
                 throw new Error('Movie not found');

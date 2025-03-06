@@ -1,4 +1,3 @@
-// backend/services/cinema.service.js
 const Cinema = require('../models/cinema.model');
 
 class CinemaService {
