@@ -1,0 +1,12 @@
+config:
+  target: 'http://localhost:3000'  # Địa chỉ API của mày
+  phases:
+    - duration: 60  # Thời gian test (60 giây)
+      arrivalRate: 10  # Mô phỏng 1000 người dùng đến mỗi giây
+scenarios:
+  - flow:
+      - post:
+          url: '/api/auth/login'
+          json:
+            email: "haison121202@gmail.com"
+            password: "123456"

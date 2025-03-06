@@ -18,5 +18,7 @@ const movieSchema = new mongoose.Schema({
   }]
 });
 
+movieSchema.index({movie_id: 1});
+
 const Movie = mongoose.model('Movie', movieSchema);
 module.exports = Movie;

@@ -3,7 +3,6 @@ const User = require("../models/user.model");
 require("dotenv").config();
 
 class AuthService {
-  // Đăng ký người dùng mới
   static async register({ name, email, password, role = "user" }) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -15,7 +14,6 @@ class AuthService {
     return { message: "User registered successfully" };
   }
 
-  // Đăng nhập người dùng
   static async login({ email, password }) {
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
@@ -31,12 +29,10 @@ class AuthService {
     return { accessToken, refreshToken };
   }
 
-  // Lấy thông tin profile người dùng
   static async getProfile() {
     return await User.find();
   }
 
-  // Đăng xuất (xóa refresh token)
   static async logout(user, refreshToken) {
     user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
     await user.save();

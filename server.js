@@ -12,7 +12,7 @@ const Seat = require('./models/seat.model');
 const Cinema = require('./models/cinema.model');
 const cors = require("cors");
 const passport = require("passport");
-
+const seatCronJob = require('./jobs/seatCronJob'); 
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -45,6 +45,14 @@ app.use("/api/cinemas", require("./routes/cinema.routes"));
 app.use("/api/rooms", require("./routes/room.routes"));
   //Showtime
 app.use("/api/showtimes", require("./routes/showtime.routes"));
+  //Payment
+app.use("/api/payments", require("./routes/payment.routes"));
+  //Review
+app.use("/api/reviews", require("./routes/review.routes"));
+  //Seat
+app.use("/api/seats", require("./routes/seat.routes"));
+  //Ticket
+app.use("/api/tickets", require("./routes/ticket.routes"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Start successful" });
