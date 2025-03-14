@@ -1,11 +1,13 @@
 const express = require('express');
-const { getSeats, createSeat, updateSeat } = require('../controllers/seat.controller');
-const router = express.Router();
 
-router.get('/:roomId', getSeats);
+module.exports = (seatController) => {
+    const router = express.Router();
 
-router.post('/', createSeat);
-
-router.post('/book', updateSeat);
-
-module.exports = router;
+    router.get('/:roomId', seatController.getSeats.bind(seatController));
+    
+    router.post('/', seatController.createSeat.bind(seatController));
+    
+    router.post('/book', seatController.updateSeat.bind(seatController));
+    
+    return router;
+}

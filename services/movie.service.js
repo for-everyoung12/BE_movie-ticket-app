@@ -1,7 +1,8 @@
 const Movie = require('../models/movie.model');
+const IMovieService = require('../interfaces/IMovieService');
 
-class MovieService {
-    static async getAllMovies(){
+class MovieService extends IMovieService{
+    async getAllMovies(){
         try {
             return await Movie.find();
         } catch (error) {  
@@ -9,7 +10,7 @@ class MovieService {
         }
     }
 
-    static async getMovieById(movieId){
+    async getMovieById(movieId){
         try {
             const movie = await Movie.findById(movieId);
             if(!movie){
@@ -20,7 +21,7 @@ class MovieService {
             throw new Error(error.message);
         }
     }
-    static async addMovie(movieData){
+    async addMovie(movieData){
         try {
             const movie = new Movie(movieData);
             return await movie.save();
@@ -29,7 +30,7 @@ class MovieService {
         }
     }
 
-    static async updateMovie(movieId, movieData){
+    async updateMovie(movieId, movieData){
         try {
             const movie = await Movie.findByIdAndUpdate(movieId, movieData, {new: true});
             if(!movie){
@@ -41,7 +42,7 @@ class MovieService {
         }
     }
     
-    static async deleteMovie(movieId){
+    async deleteMovie(movieId){
         try {
             const movie = await Movie.findByIdAndDelete(movieId);
             if(!movie){

@@ -1,7 +1,7 @@
 const Seat = require('../models/seat.model');
-
-class SeatService {
-  static async getSeatsByRoom(roomId) {
+const ISeatService  = require('../interfaces/ISeatService');
+class SeatService extends ISeatService {
+  async getSeatsByRoom(roomId) {
     try {
       return await Seat.find({ room_id: roomId });
     } catch (error) {
@@ -9,7 +9,7 @@ class SeatService {
     }
   }
 
-  static async createSeat(showtime_id, room_id, totalSeats, status) {
+  async createSeat(showtime_id, room_id, totalSeats, status) {
     if (!totalSeats || totalSeats <= 0) {
       throw new Error('totalSeats is required and must be a positive number');
     }
@@ -50,7 +50,7 @@ class SeatService {
 
 
 
-  static async updateSeatStatus(seatData) {
+  async updateSeatStatus(seatData) {
     try {
       const seat = await Seat.findOne({ seat_number: seatData.seat_number, room_id: seatData.room_id });
 
