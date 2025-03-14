@@ -2,9 +2,10 @@ const Ticket = require('../models/ticket.model');
 const Seat = require('../models/seat.model');
 const Movie = require('../models/movie.model');
 const Showtime = require('../models/showtime.model');
+const ITicketService = require('../interfaces/ITicketService');
 
-class TicketService {
-  static async createTicket(ticketData) {
+class TicketService extends ITicketService {
+   async createTicket(ticketData) {
     try {
       const seats = await Seat.find({ seat_number: { $in: ticketData.seat_numbers } });
 
@@ -36,7 +37,7 @@ class TicketService {
     }
   }
 
-  static async getTicketsByUser(userId) {
+  async getTicketsByUser(userId) {
     try {
       return await Ticket.find({ user_id: userId }).populate('movie_id').populate('seat_numbers');
     } catch (error) {
@@ -44,7 +45,7 @@ class TicketService {
     }
   }
 
-  static async updateTicketStatus(ticketId, status) {
+  async updateTicketStatus(ticketId, status) {
     try {
       const ticket = await Ticket.findByIdAndUpdate(ticketId, { status }, { new: true });
       if (!ticket) {
@@ -56,7 +57,7 @@ class TicketService {
     }
   }
 
-  static async deleteTicket(ticketId) {
+  async deleteTicket(ticketId) {
     try {
       const ticket = await Ticket.findByIdAndDelete(ticketId);
       if (!ticket) {
