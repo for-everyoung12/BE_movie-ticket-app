@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const IAuthService = require("../interfaces/IAuthService");
 require("dotenv").config();
 
-class AuthService {
-  static async register({ name, email, password, role = "user" }) {
+class AuthService extends IAuthService {
+  async register({ name, email, password, role = "user" }) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new Error("Email already exists");
@@ -14,7 +15,7 @@ class AuthService {
     return { message: "User registered successfully" };
   }
 
-  static async login({ email, password }) {
+  async login({ email, password }) {
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
       throw new Error("Invalid email or password");
@@ -29,11 +30,11 @@ class AuthService {
     return { accessToken, refreshToken };
   }
 
-  static async getProfile() {
+  async getProfile() {
     return await User.find();
   }
 
-  static async logout(user, refreshToken) {
+  async logout(user, refreshToken) {
     user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
     await user.save();
     return { message: "Logout successful" };
