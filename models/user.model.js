@@ -34,5 +34,6 @@ userSchema.methods.comparePassword = async function(password) {
 
 
 userSchema.index({ email: 1 });
+userSchema.index({ phone: 1 }, { unique: true, sparse: true });
 const User = mongoose.model('User', userSchema);
 module.exports = User;

@@ -2,26 +2,34 @@ const cron = require('node-cron');
 const Seat = require('../models/seat.model');
 const Showtime = require('../models/showtime.model');
 
+cron.schedule('* * * * *', async () => {  // Chạy mỗi phút
+    try {
+        const now = new Date();
 
-cron.schedule('* * * * *', async () => {
-  const currentTime = new Date();
+        // 1️⃣ Giải phóng tất cả ghế bị giữ đã hết hạn
+        const releasedSeats = await Seat.updateMany(
+            { status: 'held', held_until: { $lt: now } },
+            { status: 'available', held_until: null }
+        );
 
-  const seatsToRelease = await Seat.find({
-    status: 'held',
-    held_until: { $lt: currentTime },
-  });
+        if (releasedSeats.modifiedCount > 0) {
+            console.log(`${releasedSeats.modifiedCount} held seats released.`);
+        }
 
-  for (const seat of seatsToRelease) {
-    seat.status = 'available';
-    seat.held_until = null;
-    await seat.save();
+        // 2️⃣ Cập nhật available_seats trong Showtime theo từng nhóm
+        const showtimes = await Showtime.find(); // Lấy tất cả lịch chiếu
 
-    const showtime = await Showtime.findById(seat.showtime_id);
-    if (showtime) {
-      showtime.available_seats += 1;
-      await showtime.save();
+        for (let showtime of showtimes) {
+            const availableSeats = await Seat.countDocuments({ 
+                showtime_id: showtime._id, 
+                status: 'available' 
+            });
+
+            await Showtime.findByIdAndUpdate(showtime._id, { available_seats: availableSeats });
+        }
+
+        console.log("Updated available seats for all showtimes.");
+    } catch (error) {
+        console.error('Error in seat release & available seats update cron job:', error);
     }
-
-    console.log(`Seat ${seat.seat_number} released and showtime available_seats updated.`);
-  }
 });

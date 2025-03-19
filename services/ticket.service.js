@@ -5,37 +5,52 @@ const Showtime = require('../models/showtime.model');
 const ITicketService = require('../interfaces/ITicketService');
 
 class TicketService extends ITicketService {
-   async createTicket(ticketData) {
+  async createTicket(ticketData) {
     try {
-      const seats = await Seat.find({ seat_number: { $in: ticketData.seat_numbers } });
+      console.log("Received ticketData:", ticketData); 
 
-      if (seats.length !== ticketData.seat_numbers.length) {
-        throw new Error('Some seats are invalid or already booked');
-      }
+        const showtime = await Showtime.findById(ticketData.showtime_id);
+        if (!showtime) {
+            throw new Error('Showtime not found');
+        }
 
-      const ticket = new Ticket(ticketData);
-      await ticket.save();
+        console.log("Showtime found:", showtime); // Debugging
 
-      const seatNumbers = ticketData.seat_numbers;
-      const currentTime = new Date();
-      const heldUntil = new Date(currentTime.getTime() + 30 * 1000);
+        const seats = await Seat.find({
+            seat_number: { $in: ticketData.seat_numbers },
+            showtime_id: ticketData.showtime_id, 
+            room_id: showtime.room_id, 
+            status: 'available'
+        });
 
-      await Seat.updateMany(
-        { seat_number: { $in: seatNumbers } },
-        { $set: { status: 'held', held_until: heldUntil } }
-      );
+        console.log("Found seats:", seats); // Debugging
 
-      const showtime = await Showtime.findOne({ movie_id: ticketData.movie_id, showtime: ticketData.showtime });
-      if (showtime) {
-        showtime.available_seats -= ticketData.seat_numbers.length;
-        await showtime.save();
-      }
+        if (seats.length !== ticketData.seat_numbers.length) {
+            throw new Error('Some seats are invalid or already booked');
+        }
 
-      return ticket;
+        const ticket = new Ticket(ticketData);
+        await ticket.save();
+
+        const heldUntil = new Date(Date.now() + 5 * 60 * 1000);
+        await Seat.updateMany(
+            { seat_number: { $in: ticketData.seat_numbers }, showtime_id: ticketData.showtime_id },
+            { $set: { status: 'held', held_until: heldUntil } }
+        );
+
+        const availableSeats = await Seat.countDocuments({
+            showtime_id: ticketData.showtime_id,
+            status: 'available'
+        });
+        await Showtime.findByIdAndUpdate(ticketData.showtime_id, { available_seats: availableSeats });
+
+        return ticket;
     } catch (error) {
-      throw new Error('Error creating ticket: ' + error.message);
+      console.error("Error creating ticket:", error); // ✅ Log lỗi nếu có
+        throw new Error('Error creating ticket: ' + error.message);
     }
-  }
+}
+
 
   async getTicketsByUser(userId) {
     try {

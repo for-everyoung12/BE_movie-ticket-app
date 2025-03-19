@@ -13,6 +13,6 @@ module.exports = (cinemaController) => {
     router.put('/:cinemaId', cinemaController.updateCinema.bind(cinemaController));
 
     router.delete('/:cinemaId', cinemaController.deleteCinema.bind(cinemaController));
-    
+        
     return router
 }

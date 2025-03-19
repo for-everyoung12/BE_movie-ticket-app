@@ -2,8 +2,8 @@ const RoomService  = require('../services/room.service');
 
 class RoomControlller{
 
-    constructor(roomController){
-        this.roomController = roomController;
+    constructor(roomService) {  
+        this.roomService = roomService; 
     }
     
     async getAllRooms (req, res){

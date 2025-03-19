@@ -1,9 +1,11 @@
-// backend/models/cinema.model.js
 const mongoose = require('mongoose');
 
 const cinemaSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  location: { type: String, required: true },
+  name: { type: String, required: true, index: true },
+  location: { 
+    address: { type: String, required: true },
+    coordinates: {type: {lat: Number, lng: Number}, required: false} //Tìm kiếm theo vị trí
+  },
   total_rooms: { type: Number, required: true }
 });
 

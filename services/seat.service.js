@@ -1,5 +1,5 @@
 const Seat = require('../models/seat.model');
-const ISeatService  = require('../interfaces/ISeatService');
+const ISeatService = require('../interfaces/ISeatService');
 class SeatService extends ISeatService {
   async getSeatsByRoom(roomId) {
     try {
@@ -35,7 +35,7 @@ class SeatService extends ISeatService {
             room_id,
             showtime_id,
             seat_number: seatNumber,
-            status: 'available',  // Trạng thái ban đầu là 'available'
+            status: 'available',
           });
 
           await newSeat.save();
@@ -52,16 +52,29 @@ class SeatService extends ISeatService {
 
   async updateSeatStatus(seatData) {
     try {
-      const seat = await Seat.findOne({ seat_number: seatData.seat_number, room_id: seatData.room_id });
+      const seat = await Seat.findOne({
+        seat_number: seatData.seat_number,
+        room_id: seatData.room_id
+      });
 
       if (!seat) {
         throw new Error('Seat not found');
       }
 
+      const now = new Date();
+
+      if (seat.status === 'held' && seat.held_until > now) {
+        throw new Error('Seat is already held by another user');
+      }
+
       seat.status = seatData.status;
       if (seatData.status === 'held') {
         seat.held_until = new Date(Date.now() + 5 * 60 * 1000);
+      }else{
+        seat.held_until = null;
       }
+
+      seat.status = seatData.status;
       await seat.save();
       return seat;
     } catch (error) {
