@@ -1,7 +1,7 @@
 const Room = require('../models/room.model');
-
-class RoomService {
-    static async getAllRooms(){
+const IRoomService = require('../interfaces/IRoomService');
+class RoomService extends IRoomService {
+    async getAllRooms(){
         try {
             return await Room.find();
         } catch (error) {
@@ -9,7 +9,7 @@ class RoomService {
         }
     }
 
-    static async getRoomById(roomId){
+    async getRoomById(roomId){
         try {
             const room = await Room.findById(roomId);
             if(!room){
@@ -21,7 +21,7 @@ class RoomService {
         }
     }
 
-    static async addRoom(roomData){
+    async addRoom(roomData){
         try {
             const room = new Room(roomData);
             return await room.save();
@@ -30,7 +30,7 @@ class RoomService {
         }
     }
 
-    static async updateRoom(roomId, roomData){
+    async updateRoom(roomId, roomData){
         try {
             const room = await Room.findByIdAndUpdate(roomId, roomData, {new: true});
             if(!room){
@@ -42,7 +42,7 @@ class RoomService {
         }
     }
 
-    static async deleteRoom(roomId){
+    async deleteRoom(roomId){
         try {
             const room = await Room.findByIdAndDelete(roomId);
             if(!room){

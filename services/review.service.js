@@ -2,9 +2,10 @@
 const Review = require('../models/review.model');
 const Movie = require('../models/movie.model');
 const User = require('../models/user.model');
+const IReviewService = require('../interfaces/IReviewService');
 
-class ReviewService {
-  static async createReview(reviewData) {
+class ReviewService extends IReviewService{
+  async createReview(reviewData) {
     try {
       const movie = await Movie.findById(reviewData.movie_id);
       if (!movie) {
@@ -31,7 +32,7 @@ class ReviewService {
     }
   }
 
-  static async getReviewsByMovie(movieId) {
+  async getReviewsByMovie(movieId) {
     try {
       return await Review.find({ movie_id: movieId }).populate('user_id');
     } catch (error) {
@@ -39,7 +40,7 @@ class ReviewService {
     }
   }
 
-  static async updateReview(reviewId, reviewData) {
+  async updateReview(reviewId, reviewData) {
     try {
       const review = await Review.findByIdAndUpdate(reviewId, reviewData, { new: true });
       if (!review) {
@@ -51,7 +52,7 @@ class ReviewService {
     }
   }
 
-  static async deleteReview(reviewId) {
+  async deleteReview(reviewId) {
     try {
       const review = await Review.findByIdAndDelete(reviewId);
       if (!review) {

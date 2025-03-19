@@ -1,9 +1,16 @@
-const express = require('express');
-const { createPayment, getPayment } = require('../controllers/payment.controller');
-const router = express.Router();
+const express = require("express");
 
-router.post('/', createPayment);
+module.exports = (paymentController) => {
+  const router = express.Router();
 
-router.get('/:paymentId', getPayment);
+  // Tạo đơn hàng PayPal
+  router.post("/paypal/create", paymentController.createPayment.bind(paymentController));
 
-module.exports = router;
+  // Xác nhận thanh toán PayPal
+  router.post("/paypal/capture", paymentController.capturePayment.bind(paymentController));
+
+  // Lấy thông tin thanh toán
+  router.get("/:paymentId", paymentController.getPayment.bind(paymentController));
+
+  return router;
+};

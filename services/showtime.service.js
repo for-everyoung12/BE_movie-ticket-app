@@ -1,8 +1,9 @@
 const Showtime = require('../models/showtime.model');
 const Movie = require('../models/movie.model');
 const Room = require('../models/room.model');
-class ShowtimeService {
-    static async getShowtimeByMovies(movieId){
+const IShowtimeService = require('../interfaces/IShowtimeService');
+class ShowtimeService extends IShowtimeService{
+    async getShowtimeByMovies(movieId){
         try {
             const showtime = await Showtime.find({movie_id: movieId})
             .populate('movie_id', 'title')
@@ -13,7 +14,7 @@ class ShowtimeService {
         }
     }
 
-    static async addShowtime(showtimeData){
+    async addShowtime(showtimeData){
         try {
             const movie = await Movie.findById(showtimeData.movie_id);
             if(!movie){
@@ -32,7 +33,7 @@ class ShowtimeService {
         }
     }
 
-    static async updateShowTime(showtimeId, showtimeData){
+    async updateShowTime(showtimeId, showtimeData){
         try {
             const showtime = Showtime.findByIdAndUpdate(showtimeId, showtimeData, {new: true});
             if(!showtime){
@@ -44,7 +45,7 @@ class ShowtimeService {
         }
     }
 
-    static async deleteShowtime(showtimeId){
+    async deleteShowtime(showtimeId){
         try {
             const showtime = Showtime.findByIdAndDelete(showtimeId);
             if(!showtime){
