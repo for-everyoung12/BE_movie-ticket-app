@@ -6,6 +6,7 @@ const User = require("../models/user.model");
 const IPaymentService = require("../interfaces/IPaymentService");
 const paypalClient = require("../config/paypal.config");
 const paypal = require("@paypal/checkout-server-sdk");
+const EmailService = require("../services/email.service");
 
 class PaymentService extends IPaymentService {
   // Tạo đơn hàng PayPal
@@ -48,7 +49,6 @@ class PaymentService extends IPaymentService {
             approveLink = response.result.links.find(link => link.rel === "approve")?.href;
         }
 
-        // Lưu payment vào DB
         const payment = new Payment({
             user_id,
             ticket_ids,
@@ -59,19 +59,17 @@ class PaymentService extends IPaymentService {
         });
         await payment.save({ session });
 
-        // **Chỉ commit nếu mọi thứ OK**
         await session.commitTransaction();
         session.endSession();
 
         return {
             payment_id: payment._id,
             transaction_id,
-            approve_link: approveLink, // Trả về link để user bấm vào
+            approve_link: approveLink, 
             status: "Payment Created",
         };
 
     } catch (error) {
-        // **Chỉ abort nếu session vẫn còn hoạt động**
         if (session.inTransaction()) {
             await session.abortTransaction();
         }
@@ -106,12 +104,12 @@ class PaymentService extends IPaymentService {
         throw new Error("Payment record not found.");
       }
   
-      // Lấy danh sách vé liên quan đến thanh toán
-      const tickets = await Ticket.find({ _id: { $in: payment.ticket_ids } });
+      const tickets = await Ticket.find({ _id: { $in: payment.ticket_ids } })
+      .populate("movie_id") 
+      .populate("showtime_id"); 
+
+      console.log('Tickets:', tickets); 
   
-      console.log('Tickets:', tickets);  // Kiểm tra xem seat_numbers có đúng không
-  
-      // Lấy danh sách ghế cần cập nhật
       const allSeatNumbers = tickets.flatMap(ticket => ticket.seat_numbers);
       const allShowtimeIds = tickets.map(ticket => ticket.showtime_id);
   
@@ -122,40 +120,52 @@ class PaymentService extends IPaymentService {
         throw new Error("No seat numbers found for tickets.");
       }
   
-      // Cập nhật trạng thái vé
       await Ticket.updateMany(
         { _id: { $in: payment.ticket_ids } },
         { $set: { payment_status: "paid", status: "booked" } },
         { session }
       );
   
-      // Cập nhật danh sách vé đã đặt của user
       await User.findByIdAndUpdate(
         payment.user_id,
         { $push: { booked_tickets: { $each: payment.ticket_ids } } },
         { session }
       );
   
-      // **🔥 TÍCH HỢP LẠI PHẦN CẬP NHẬT `SEAT` TỪ CODE CŨ 🔥**
       const seatUpdateResult = await Seat.updateMany(
         { 
           seat_number: { $in: allSeatNumbers }, 
           showtime_id: { $in: allShowtimeIds }, 
-          status: "held"  // Chỉ cập nhật những ghế đang được giữ chỗ
+          status: "held"  
         },
         { $set: { status: "booked", held_until: null } },
         { session }
       );
   
-      console.log("Seat Update Result:", seatUpdateResult); // Log kết quả cập nhật ghế
+      console.log("Seat Update Result:", seatUpdateResult);
   
-      // Hoàn tất giao dịch
       await session.commitTransaction();
       session.endSession();
   
+      const user = await User.findById(payment.user_id);
+      if (user && user.email) {
+        const ticketDetails = {
+          movie_name: tickets[0].movie_id.title, 
+          showtime: tickets[0].showtime_id?.showtime
+          ? new Date(tickets[0].showtime_id.showtime).toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })
+          : "Không xác định",
+          seat_numbers: allSeatNumbers,
+          price: payment.total_amount
+        };
+
+        await EmailService.sendBookingConfirmation(user.email, ticketDetails);
+        console.log("✅ Email đã gửi thành công!");
+      } else {
+        console.log("⚠️ Không tìm thấy email của người dùng, không thể gửi email.");
+      }
+
       return { status: "Payment Captured", payment };
     } catch (error) {
-      // Rollback nếu có lỗi
       await session.abortTransaction();
       session.endSession();
       throw new Error("Error capturing payment: " + error.message);
