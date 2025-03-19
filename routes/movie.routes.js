@@ -10,4 +10,4 @@ module.exports = (movieController) => {
     router.delete('/:movieId', movieController.deleteMovie.bind(movieController));
 
     return router;
-};
+}

@@ -1,7 +1,7 @@
 const Cinema = require('../models/cinema.model');
-
-class CinemaService {
-  static async getAllCinemas() {
+const ICinemaService = require('../interfaces/ICinemaService');
+class CinemaService extends ICinemaService {
+  async getAllCinemas() {
     try {
       return await Cinema.find();
     } catch (error) {
@@ -9,7 +9,7 @@ class CinemaService {
     }
   }
 
-  static async getCinemaById(cinemaId) {
+  async getCinemaById(cinemaId) {
     try {
       return await Cinema.findById(cinemaId);
     } catch (error) {
@@ -17,7 +17,7 @@ class CinemaService {
     }
   }
 
-  static async addCinema(cinemaData) {
+  async addCinema(cinemaData) {
     try {
       const cinema = new Cinema(cinemaData);
       await cinema.save();
@@ -27,7 +27,7 @@ class CinemaService {
     }
   }
 
-  static async updateCinema(cinemaId, cinemaData) {
+  async updateCinema(cinemaId, cinemaData) {
     try {
       const cinema = await Cinema.findByIdAndUpdate(cinemaId, cinemaData, { new: true });
       if (!cinema) {
@@ -39,7 +39,7 @@ class CinemaService {
     }
   }
 
-  static async deleteCinema(cinemaId) {
+  async deleteCinema(cinemaId) {
     try {
       const cinema = await Cinema.findByIdAndDelete(cinemaId);
       if (!cinema) {

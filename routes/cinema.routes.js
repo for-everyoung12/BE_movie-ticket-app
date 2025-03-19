@@ -1,15 +1,18 @@
 const express = require('express');
-const { getCinemas, getCinemaById, addCinema, updateCinema, deleteCinema } = require('../controllers/cinema.controller');
-const router = express.Router();
 
-router.get('/', getCinemas);
+module.exports = (cinemaController) => {
 
-router.get('/:cinemaId', getCinemaById);
+    const router = express.Router();
 
-router.post('/', addCinema);
+    router.get('/', cinemaController.getAllCinemas.bind(cinemaController));
 
-router.put('/:cinemaId', updateCinema);
+    router.get('/:cinemaId', cinemaController.getCinemaById.bind(cinemaController));
 
-router.delete('/:cinemaId', deleteCinema);
+    router.post('/', cinemaController.addCinema.bind(cinemaController));
 
-module.exports = router;
+    router.put('/:cinemaId', cinemaController.updateCinema.bind(cinemaController));
+
+    router.delete('/:cinemaId', cinemaController.deleteCinema.bind(cinemaController));
+    
+    return router
+}
