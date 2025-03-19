@@ -6,7 +6,7 @@ module.exports = (showtimeController) => {
 
     const  router = express.Router();
 
-    router.get('/',showtimeController.getShowtimeByMovies.bind(showtimeController));
+    router.get('/:movieId',showtimeController.getShowtimeByMovies.bind(showtimeController));
     router.post('/',showtimeController.addShowtime.bind(showtimeController));
     router.put('/:showtimeId',showtimeController.updateShowtime.bind(showtimeController));
     router.delete('/:showtimeId',showtimeController.deleteShowtime.bind(showtimeController));

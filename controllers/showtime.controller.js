@@ -8,7 +8,8 @@ class ShowtimeController{
 
      async getShowtimeByMovies (req, res){
         try {
-            const showtimes = await this.showtimeService.getShowtimeByMovies();
+            const {movieId} = req.params;
+            const showtimes = await this.showtimeService.getShowtimeByMovies(movieId);
             return res.status(200).json({showtimes});
         } catch (error) {
             res.status(500).json({error: error.message});

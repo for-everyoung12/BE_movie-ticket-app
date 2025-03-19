@@ -9,7 +9,7 @@ class TicketController {
     const ticketData = req.body;
     try {
       const ticket = await this.ticketService.createTicket(ticketData);
-      res.status(201).json(ticket);  // Trả về vé mới tạo
+      res.status(201).json(ticket);  
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -19,7 +19,7 @@ class TicketController {
     const { userId } = req.params;
     try {
       const tickets = await this.ticketService.getTicketsByUser(userId);
-      res.status(200).json(tickets);  // Trả về danh sách vé của người dùng
+      res.status(200).json(tickets); 
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
