@@ -19,7 +19,7 @@ class ReviewController {
   async getReviews (req, res){
     const { movieId } = req.params;
     try {
-      const reviews = await this.requireeviewService.getReviewsByMovie(movieId);
+      const reviews = await this.reviewService.getReviewsByMovie(movieId);
       res.status(200).json(reviews);
     } catch (err) {
       res.status(500).json({ message: err.message });

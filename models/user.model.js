@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true, validate: {
+  email: { type: String, required: true, unique: true, index: true ,validate: {
     validator: function(v) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
     },
@@ -33,7 +33,6 @@ userSchema.methods.comparePassword = async function(password) {
 };
 
 
-userSchema.index({ email: 1 });
 userSchema.index({ phone: 1 }, { unique: true, sparse: true });
 const User = mongoose.model('User', userSchema);
 module.exports = User;
