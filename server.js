@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-
+const expressFileUpload = require('express-fileupload');
 //model
 const Movie = require('./models/movie.model');
 const User = require('./models/user.model');
@@ -93,7 +93,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
-
+// Sử dụng express-fileupload
+app.use(expressFileUpload());
 // Connect DB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

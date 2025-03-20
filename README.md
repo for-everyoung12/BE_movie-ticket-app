@@ -1,4 +1,3 @@
-
 # 🎟️ Movie Ticket App - Backend
 
 Đây là backend của ứng dụng **Movie Ticket Booking** được xây dựng bằng **Node.js, Express, MongoDB**.
