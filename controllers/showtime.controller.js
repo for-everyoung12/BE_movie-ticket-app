@@ -43,7 +43,7 @@ class ShowtimeController{
             const showtime = await this.showtimeService.deleteShowtime(showtimeId);
             return res.status(200).json({showtime}); 
         } catch (error) {
-            
+            res.status(500).json({error: error.message});
         }
     }
 }

@@ -1,13 +1,13 @@
 const express = require('express');
 
-module.exports = (roomControlller)=>{
+module.exports = (roomController)=>{
     const  router = express.Router();
 
-    router.get('/',roomControlller.getAllRooms.bind(roomControlller));
-    router.get('/:roomId',roomControlller.getRoomById.bind(roomControlller));
-    router.post('/',roomControlller.addRoom.bind(roomControlller));
-    router.put('/:roomId',roomControlller.updateRoom.bind(roomControlller));
-    router.delete('/:roomId',roomControlller.deleteRoom.bind(roomControlller));
+    router.get('/',roomController.getAllRooms.bind(roomController));
+    router.get('/:roomId',roomController.getRoomById.bind(roomController));
+    router.post('/',roomController.addRoom.bind(roomController));
+    router.put('/:roomId',roomController.updateRoom.bind(roomController));
+    router.delete('/:roomId',roomController.deleteRoom.bind(roomController));
     
     return router;
 }
