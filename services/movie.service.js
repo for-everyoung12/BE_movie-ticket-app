@@ -1,6 +1,5 @@
 const Movie = require('../models/movie.model');
 const IMovieService = require('../interfaces/IMovieService');
-
 class MovieService extends IMovieService{
     async getAllMovies(){
         try {
