@@ -1,6 +1,6 @@
 const Movie = require('../models/movie.model');
 const IMovieService = require('../interfaces/IMovieService');
-const cloudinary = require('../config/cloudinary');
+const cloudinary = require('../utils/cloudinary');
 
 class MovieService extends IMovieService {
     async getAllMovies() {
