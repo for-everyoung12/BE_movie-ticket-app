@@ -167,5 +167,5 @@ Authorization: Bearer <accessToken>
 
 ## 📝 **Tác giả**
 👨‍💻 **Hải Sơn**  
-📧 Email: [your-email@example.com]  
+📧 Email: [haison121202@gmail.com]  
 📌 Github: [github.com/for-everyoung12](https://github.com/for-everyoung12)
