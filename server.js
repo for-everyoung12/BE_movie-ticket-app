@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const expressFileUpload = require('express-fileupload');
+
 //model
 const Movie = require('./models/movie.model');
 const User = require('./models/user.model');
@@ -29,28 +29,6 @@ const ticketRoutes = require('./routes/ticket.routes');
 const SeatService = require('./services/seat.service');
 const SeatController = require('./controllers/seat.controller');
 const seatRoutes = require('./routes/seat.routes');
-
-const CinemaService = require('./services/cinema.service');
-const CinemaController = require('./controllers/cinema.controller');
-const cinemaRoutes = require('./routes/cinema.routes');
-
-const ShowtimeService = require('./services/showtime.service');
-const ShowtimeController = require('./controllers/showtime.controller');
-const showtimeRoutes = require('./routes/showtime.routes');
-
-const RoomService = require('./services/room.service');
-const RoomController = require('./controllers/room.controller');
-const roomRoutes = require('./routes/room.routes');
-
-const ReviewService = require('./services/review.service');
-const ReviewController = require('./controllers/review.controller');
-const reviewRoutes = require('./routes/review.routes'); 
-
-const PaymentService = require('./services/payment.service');
-const PaymentController = require('./controllers/payment.controller');
-const paymentRoutes = require('./routes/payment.routes');
-
-
 //Inject dependencies
   //Movie
 const movieService = new MovieService();
@@ -64,21 +42,6 @@ const ticketController = new TicketController(ticketService);
   //Seat
 const seatService = new SeatService();
 const seatController = new SeatController(seatService);
-  //Cinema
-const cinemaService = new CinemaService();
-const cinemaController = new CinemaController(cinemaService);
-  //Showtime
-const showtimeService = new ShowtimeService();
-const showtimeController = new ShowtimeController(showtimeService);
-  //Room
-const roomService = new RoomService();
-const roomController = new RoomController(roomService);
-  //Review
-const reviewService = new ReviewService();
-const reviewController = new ReviewController(reviewService);
-  //Payment
-const paymentService = new PaymentService();
-const paymentController = new PaymentController(paymentService);
 //middleware
 const cors = require("cors");
 const passport = require("passport");
@@ -93,8 +56,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
-// Sử dụng express-fileupload
-app.use(expressFileUpload());
+
 // Connect DB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -114,15 +76,15 @@ app.use("/api/auth", authRoutes(authController));
   //Movie
 app.use("/api/movies", movieRoutes(movieController));
   //Cinema
-app.use("/api/cinemas", cinemaRoutes(cinemaController));
+app.use("/api/cinemas", require("./routes/cinema.routes"));
   //Room
-app.use("/api/rooms", roomRoutes(roomController));
+app.use("/api/rooms", require("./routes/room.routes"));
   //Showtime
-app.use("/api/showtimes", showtimeRoutes(showtimeController));
+app.use("/api/showtimes", require("./routes/showtime.routes"));
   //Payment
-app.use("/api/payments", paymentRoutes(paymentController));
+app.use("/api/payments", require("./routes/payment.routes"));
   //Review
-app.use("/api/reviews", reviewRoutes(reviewController));
+app.use("/api/reviews", require("./routes/review.routes"));
   //Seat
 app.use("/api/seats", seatRoutes(seatController));
   //Ticket
