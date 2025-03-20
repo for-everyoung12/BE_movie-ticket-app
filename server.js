@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-
 //model
 const Movie = require('./models/movie.model');
 const User = require('./models/user.model');
@@ -29,6 +28,27 @@ const ticketRoutes = require('./routes/ticket.routes');
 const SeatService = require('./services/seat.service');
 const SeatController = require('./controllers/seat.controller');
 const seatRoutes = require('./routes/seat.routes');
+
+const CinemaService = require('./services/cinema.service');
+const CinemaController = require('./controllers/cinema.controller');
+const cinemaRoutes = require('./routes/cinema.routes');
+
+const RoomService = require('./services/room.service');
+const RoomController = require('./controllers/room.controller');
+const roomRoutes = require('./routes/room.routes');
+
+const ShowtimeService = require('./services/showtime.service');
+const ShowtimeController = require('./controllers/showtime.controller');
+const showtimeRoutes = require('./routes/showtime.routes');
+
+const PaymentService = require('./services/payment.service');
+const PaymentController = require('./controllers/payment.controller');
+const paymentRoutes = require('./routes/payment.routes');
+
+const ReviewService = require('./services/review.service');
+const ReviewController = require('./controllers/review.controller');
+const reviewRoutes = require('./routes/review.routes');
+
 //Inject dependencies
   //Movie
 const movieService = new MovieService();
@@ -42,6 +62,21 @@ const ticketController = new TicketController(ticketService);
   //Seat
 const seatService = new SeatService();
 const seatController = new SeatController(seatService);
+  //Cinema
+const cinemaService = new CinemaService();
+const cinemaController = new CinemaController(cinemaService);
+  //Room
+const roomService = new RoomService();
+const roomController = new RoomController(roomService);
+  //Showtime
+const showtimeService = new ShowtimeService();
+const showtimeController = new ShowtimeController(showtimeService);
+  //Payment
+const paymentService = new PaymentService();
+const paymentController = new PaymentController(paymentService);
+  //Review
+const reviewService = new ReviewService();
+const reviewController = new ReviewController(reviewService);
 //middleware
 const cors = require("cors");
 const passport = require("passport");
@@ -76,15 +111,15 @@ app.use("/api/auth", authRoutes(authController));
   //Movie
 app.use("/api/movies", movieRoutes(movieController));
   //Cinema
-app.use("/api/cinemas", require("./routes/cinema.routes"));
+app.use("/api/cinemas", cinemaRoutes(cinemaController));
   //Room
-app.use("/api/rooms", require("./routes/room.routes"));
+app.use("/api/rooms", roomRoutes(roomController));
   //Showtime
-app.use("/api/showtimes", require("./routes/showtime.routes"));
+app.use("/api/showtimes", showtimeRoutes(showtimeController));
   //Payment
-app.use("/api/payments", require("./routes/payment.routes"));
+app.use("/api/payments", paymentRoutes(paymentController));
   //Review
-app.use("/api/reviews", require("./routes/review.routes"));
+app.use("/api/reviews", reviewRoutes(reviewController));
   //Seat
 app.use("/api/seats", seatRoutes(seatController));
   //Ticket
