@@ -12,7 +12,6 @@
 - **Node.js & Express.js** → Xử lý API  
 - **MongoDB & Mongoose** → Lưu trữ dữ liệu  
 - **JSON Web Token (JWT)** → Xác thực người dùng  
-- **Cloudinary (nếu có)** → Lưu trữ ảnh phim  
 - **Node-cron** → Quản lý cron job tự động  
 
 ### **🌍 Deploy**
