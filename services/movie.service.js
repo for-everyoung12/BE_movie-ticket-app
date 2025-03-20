@@ -14,7 +14,7 @@ class MovieService extends IMovieService{
         try {
             const movie = await Movie.findById(movieId);
             if(!movie){
-                throw new Error('Movie not found'); 
+                throw new Error('Movie not found');
             }
             return movie;
         } catch (error) {
