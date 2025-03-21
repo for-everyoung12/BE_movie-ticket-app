@@ -6,6 +6,15 @@ class ShowtimeController{
         this.showtimeService = showtimeService;
     }
 
+    async getAllShowtime(req, res) {
+        try {
+            const showtimes = await this.showtimeService.getAllShowtime();
+            return res.status(200).json({ showtimes });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
      async getShowtimeByMovies (req, res){
         try {
             const {movieId} = req.params;
