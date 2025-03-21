@@ -30,6 +30,14 @@ class AuthService extends IAuthService {
     return { accessToken, refreshToken };
   }
 
+  async getProfileById(userId) {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user;
+  }
+
   async getProfile() {
     return await User.find();
   }
