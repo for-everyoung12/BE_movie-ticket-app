@@ -7,6 +7,7 @@ module.exports = (authController) => {
     router.post("/register", authController.register.bind(authController));
     router.post("/login", authController.login.bind(authController));
     router.get("/profile", authenticateJWT, authController.profile.bind(authController));
+    router.get("/profile/:id", authenticateJWT, authController.getProfileById.bind(authController));
     router.post("/logout", authenticateJWT, authController.logout.bind(authController));
 
     return router; 
