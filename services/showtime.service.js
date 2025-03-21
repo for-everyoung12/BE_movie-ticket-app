@@ -4,6 +4,29 @@ const Room = require('../models/room.model');
 const Seat = require('../models/seat.model');
 const IShowtimeService = require('../interfaces/IShowtimeService');
 class ShowtimeService extends IShowtimeService {
+
+    async getAllShowtime() {    
+        try {
+            const showtimes = await Showtime.find()
+                .populate('movie_id', 'title') // Lấy thông tin phim
+                .populate('room_id', 'hall_number'); // Lấy thông tin phòng chiếu
+
+            // Lấy số ghế trống cho mỗi lịch chiếu
+            for (let showtime of showtimes) {
+                const availableSeats = await Seat.countDocuments({
+                    showtime_id: showtime._id,
+                    status: 'available'
+                });
+                showtime = showtime.toObject();
+                showtime.available_seats = availableSeats;
+            }
+
+            return showtimes;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
     async getShowtimeByMovies(movieId) {
         try {
             const showtimes = await Showtime.find({ movie_id: movieId })
