@@ -34,14 +34,14 @@ class PaymentService extends IPaymentService {
                 purchase_units: [{
                     amount: {
                         currency_code: "USD",
-                        value: total_amount.toFixed(2), // Fix lỗi số
+                        value: total_amount.toFixed(2), 
                        
                     },
                 }],
-              //   application_context: {
-              //     return_url: "http://localhost:3000/api/payments/paypal/success", // Redirect khi thành công
-              //     cancel_url: "http://localhost:3000/api/payments/paypal/cancel"   // Redirect khi hủy thanh toán
-              // }
+                application_context: {
+                  return_url: "https://example.com/redirect-success", 
+                  cancel_url: "https://example.com/redirect-cancel"
+                }
             });
 
             const response = await paypalClient.execute(request);
