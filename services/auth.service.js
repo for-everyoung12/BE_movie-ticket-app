@@ -21,7 +21,7 @@ class AuthService extends IAuthService {
       throw new Error("Invalid email or password");
     }
 
-    const accessToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const accessToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "60m" });
     const refreshToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
     user.refreshTokens.push(refreshToken);
