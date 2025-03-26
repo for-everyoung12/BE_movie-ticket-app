@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Showtime = require("../models/showtime.model");
 const IAuthService = require("../interfaces/IAuthService");
 require("dotenv").config();
 
@@ -31,10 +32,19 @@ class AuthService extends IAuthService {
   }
 
   async getProfileById(userId) {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate({
+      path: 'booked_tickets',
+      populate: [
+        { path: 'movie_id', select: 'title' },
+        { path: 'room_id', select: 'hall_number' },
+        { path: 'showtime_id', select: 'showtime' }
+      ]
+    });
+  
     if (!user) {
       throw new Error("User not found");
     }
+  
     return user;
   }
 
