@@ -9,7 +9,7 @@ const movieSchema = new mongoose.Schema({
   poster_url: { type: String },
   rating: { type: Number, min: 1, max: 10 }, 
   average_rating: { type: Number, min: 1, max: 10 },
-  age_rating: { type: String, enum: ['G', 'PG', 'PG-13', 'R'] },
+  age_rating: { type: String, enum: ['G', 'PG', 'PG-13', 'R']},
   trailer_url: { type: String }
 });
 
