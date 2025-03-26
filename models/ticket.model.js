@@ -9,7 +9,7 @@ const ticketSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   showtime_price: { type: Number, required: true },
   payment_status: { type: String, enum: ['paid', 'unpaid'], default: 'unpaid' },
-  held_until: { type: Date, default: Date.now, expires: '30s' } 
+  held_until: { type: Date, default: Date.now, expires: '300s' } 
 });
 
 ticketSchema.index({ user_id: 1 }); 
