@@ -24,7 +24,7 @@ class AuthService extends IAuthService {
     const accessToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "60m" });
     const refreshToken = jwt.sign({ sub: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    user.refreshTokens.push(refreshToken);
+    user.refreshTokens = [refreshToken];
     await user.save();
 
     return { accessToken, refreshToken };

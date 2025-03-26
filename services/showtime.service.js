@@ -8,8 +8,8 @@ class ShowtimeService extends IShowtimeService {
     async getAllShowtime() {    
         try {
             const showtimes = await Showtime.find()
-                .populate('movie_id', 'title') // Lấy thông tin phim
-                .populate('room_id', 'hall_number'); // Lấy thông tin phòng chiếu
+                .populate('movie_id') 
+                .populate('room_id'); 
 
             // Lấy số ghế trống cho mỗi lịch chiếu
             for (let showtime of showtimes) {
@@ -30,8 +30,8 @@ class ShowtimeService extends IShowtimeService {
     async getShowtimeByMovies(movieId) {
         try {
             const showtimes = await Showtime.find({ movie_id: movieId })
-                .populate('movie_id', 'title')
-                .populate('room_id', 'hall_number');
+                .populate('movie_id')
+                .populate('room_id');
 
             //lấy số ghế trống = check status 'availale' trong seat
             for (let showtime of showtimes) {
