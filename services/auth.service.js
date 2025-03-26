@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const Showtime = require("../models/showtime.model");
+const Ticket = require('../models/ticket.model'); // hoặc đường dẫn đúng tới model
+
 const IAuthService = require("../interfaces/IAuthService");
 require("dotenv").config();
 
