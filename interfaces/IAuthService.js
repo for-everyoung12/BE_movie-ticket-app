@@ -5,5 +5,6 @@ class IAuthService {
     async getProfile() {}
     async updateProfile(userId, updateData){}
     async logout(user, refreshToken) {}
+    async deleteProfile(userId){}
 }
 module.exports = IAuthService;  

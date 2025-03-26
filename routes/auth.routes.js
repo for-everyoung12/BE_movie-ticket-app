@@ -10,6 +10,7 @@ module.exports = (authController) => {
     router.get("/profile/:id", authenticateJWT, authController.getProfileById.bind(authController));
     router.put("/profile/:id", authenticateJWT, authController.updateProfile.bind(authController));
     router.post("/logout", authenticateJWT, authController.logout.bind(authController));
+    router.delete("/profile/:id", authenticateJWT, authController.deleteProfile.bind(authController));
 
     return router; 
 }

@@ -64,12 +64,20 @@ class AuthService extends IAuthService {
     };
   }
   
-
   async logout(user, refreshToken) {
     user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
     await user.save();
     return { message: "Logout successful" };
   }
+
+  async deleteProfile(userId) {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return { message: "User deleted successfully", userId: user._id };
+  }
+  
 }
 
 module.exports = AuthService;
