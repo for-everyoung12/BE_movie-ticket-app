@@ -122,7 +122,11 @@ class PaymentService extends IPaymentService {
   
       await Ticket.updateMany(
         { _id: { $in: payment.ticket_ids } },
-        { $set: { payment_status: "paid", status: "booked" } },
+        { $set: { 
+          payment_status: "paid", 
+          status: "booked",
+          held_until: null
+        }},
         { session }
       );
   
