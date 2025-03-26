@@ -2,6 +2,7 @@ const Ticket = require('../models/ticket.model');
 const Seat = require('../models/seat.model');
 const Movie = require('../models/movie.model');
 const Showtime = require('../models/showtime.model');
+const Room = require('../models/room.model')
 const ITicketService = require('../interfaces/ITicketService');
 const User = require('../models/user.model');
 class TicketService extends ITicketService {
@@ -54,21 +55,25 @@ class TicketService extends ITicketService {
 
 async getTicketsByUser(userId) {
   try {
-    // Tìm user và populate booked_tickets để lấy danh sách vé
     const user = await User.findById(userId).populate({
       path: 'booked_tickets',
-      populate: [{ path: 'movie_id' }, { path: 'seat_numbers' }]
+      populate: [
+        { path: 'movie_id', select: 'title poster_url' },
+        { path: 'showtime_id', select: 'showtime' },
+        { path: 'room_id', select: 'hall_number' }
+      ]
     });
 
     if (!user || user.booked_tickets.length === 0) {
-      return []; // Trả về mảng rỗng nếu không có vé
+      return [];
     }
 
-    return user.booked_tickets; // Trả về danh sách vé đã đặt
+    return user.booked_tickets;
   } catch (error) {
     throw new Error('Error retrieving tickets');
   }
 }
+
 
   async updateTicketStatus(ticketId, status) {
     try {
