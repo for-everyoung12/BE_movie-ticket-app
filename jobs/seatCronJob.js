@@ -6,7 +6,6 @@ cron.schedule('* * * * *', async () => {  // Chạy mỗi phút
     try {
         const now = new Date();
 
-        // 1️⃣ Giải phóng tất cả ghế bị giữ đã hết hạn
         const releasedSeats = await Seat.updateMany(
             { status: 'held', held_until: { $lt: now } },
             { status: 'available', held_until: null }
@@ -16,7 +15,6 @@ cron.schedule('* * * * *', async () => {  // Chạy mỗi phút
             console.log(`${releasedSeats.modifiedCount} held seats released.`);
         }
 
-        // 2️⃣ Cập nhật available_seats trong Showtime theo từng nhóm
         const showtimes = await Showtime.find(); // Lấy tất cả lịch chiếu
 
         for (let showtime of showtimes) {
