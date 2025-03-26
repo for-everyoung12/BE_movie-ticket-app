@@ -7,7 +7,7 @@ module.exports = (seatController) => {
     
     router.post('/', seatController.createSeat.bind(seatController));
     
-    router.post('/book', seatController.updateSeat.bind(seatController));
+    router.put('/book', seatController.updateSeat.bind(seatController));
     
     return router;
 }
