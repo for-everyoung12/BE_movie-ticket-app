@@ -81,15 +81,18 @@ class ShowtimeService extends IShowtimeService {
 
     async deleteShowtime(showtimeId) {
         try {
-            const showtime = Showtime.findByIdAndDelete(showtimeId);
-            if (!showtime) {
-                throw new Error('Showtime not found');
-            }
-            return { message: 'Showtime deleted successfully' };
+          const showtime = await Showtime.findByIdAndDelete(showtimeId);
+          if (!showtime) {
+            throw new Error('Showtime not found');
+          }
+      
+          await Seat.deleteMany({ showtime_id: showtimeId });
+      
+          return { message: 'Showtime deleted successfully' };
         } catch (error) {
-            throw new Error(error.message);
+          throw new Error(error.message);
         }
-    }
+      }
 }
 
 module.exports = ShowtimeService;
