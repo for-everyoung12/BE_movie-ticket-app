@@ -2,6 +2,7 @@ const Showtime = require('../models/showtime.model');
 const Movie = require('../models/movie.model');
 const Room = require('../models/room.model');
 const Seat = require('../models/seat.model');
+const mongoose = require('mongoose');
 const IShowtimeService = require('../interfaces/IShowtimeService');
 class ShowtimeService extends IShowtimeService {
 
@@ -86,7 +87,7 @@ class ShowtimeService extends IShowtimeService {
             throw new Error('Showtime not found');
           }
       
-          await Seat.deleteMany({ showtime_id: showtimeId });
+          await Seat.deleteMany({ showtime_id: new mongoose.Types.ObjectId(showtimeId) });
       
           return { message: 'Showtime deleted successfully' };
         } catch (error) {

@@ -42,6 +42,18 @@ class AuthController {
     }
   };
 
+  async updateProfile(req, res) {
+    try {
+      const { id } = req.params;
+      const { name, phone } = req.body;
+  
+      const result = await this.authService.updateProfile(id, { name, phone });
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  
   async logout(req, res) {
     try {
       const refreshToken = req.body.refreshToken;
@@ -51,6 +63,17 @@ class AuthController {
       res.status(400).json({ message: err.message });
     }
   };
+
+  async deleteProfile(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await this.authService.deleteProfile(id);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+  
 
 }
 

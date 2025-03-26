@@ -42,11 +42,42 @@ class AuthService extends IAuthService {
     return await User.find();
   }
 
+  async updateProfile(userId, updateData) {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+  
+    if (updateData.name) user.name = updateData.name;
+    if (updateData.phone) user.phone = updateData.phone;
+  
+    await user.save();
+  
+    return {
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+      }
+    };
+  }
+  
   async logout(user, refreshToken) {
     user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
     await user.save();
     return { message: "Logout successful" };
   }
+
+  async deleteProfile(userId) {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return { message: "User deleted successfully", userId: user._id };
+  }
+  
 }
 
 module.exports = AuthService;
