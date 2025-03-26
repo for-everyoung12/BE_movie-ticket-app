@@ -37,9 +37,8 @@ class AuthService extends IAuthService {
     const user = await User.findById(userId).populate({
       path: 'booked_tickets',
       populate: [
-        { path: 'movie_id', select: 'title' },
-        { path: 'room_id', select: 'hall_number' },
-        { path: 'showtime_id', select: 'showtime' }
+        { path: 'movie_id', select: 'title poster_url' },
+        { path: 'showtime_id', populate: { path: 'room_id', select: 'hall_number' } } 
       ]
     });
   
