@@ -68,7 +68,7 @@ class ShowtimeService extends IShowtimeService {
         }
     }
 
-    async updateShowTime(showtimeId, showtimeData) {
+    async updateShowtime(showtimeId, showtimeData) {
         try {
             const showtime = Showtime.findByIdAndUpdate(showtimeId, showtimeData, { new: true });
             if (!showtime) {
