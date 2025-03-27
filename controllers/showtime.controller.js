@@ -39,7 +39,7 @@ class ShowtimeController{
         try {
             const {showtimeId} = req.params;
             const showtimeData = req.body;
-            const showtime = await this.showtimeService.updateShowime(showtimeId, showtimeData);
+            const showtime = await this.showtimeService.updateShowtime(showtimeId, showtimeData);
         return res.status(200).json({showtime});
         } catch (error) {
             res.status(500).json({error: error.message});
